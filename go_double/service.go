@@ -8,11 +8,13 @@ var (
 
 type ProductService struct{}
 
-func (p *ProductService) FindById(repository ProductRepository , id string)( *Product , error ){
-	if id == ""{
-		return nil,ErrMissingArgs
+func (p *ProductService) FindById(repository IProductRepository, id string) (*Product, error) {
+	if id == "" {
+		return nil, ErrMissingArgs
 	}
 
-	return nil,nil
+	result := repository.FindById(id)
+
+	return result, nil
 
 }
