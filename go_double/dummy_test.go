@@ -4,7 +4,7 @@ import "testing"
 
 type DummyProductRepository struct{}
 
-func (repository DummyProductRepository) FindById(id string) *Product {
+func (repository *DummyProductRepository) FindById(id string) *Product {
 	return &Product{}
 }
 
@@ -13,7 +13,7 @@ func TestFindByIdSholdReturnErrorWhenIdNil(t *testing.T) {
 	productRepository := DummyProductRepository{}
 	want := ErrMissingArgs
 
-	_, got := productService.FindById(productRepository, "")
+	_, got := productService.FindById(&productRepository, "")
 
 	if got != ErrMissingArgs {
 		t.Errorf("Want '%s' got '%s'", want, got)

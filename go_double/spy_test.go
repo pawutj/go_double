@@ -2,20 +2,22 @@ package go_double
 
 import "testing"
 
-type StubProductRepository struct {
-	product Product
+type SpyProductRepository struct {
+	product       Product
+	findWasCalled bool
 }
 
-func (repository *StubProductRepository) FindById(id string) *Product {
+func (repository *SpyProductRepository) FindById(id string) *Product {
+	repository.findWasCalled = true
 	return &repository.product
 }
 
-func TestFindByIdSholdReturnProduct(t *testing.T) {
+func TestFindByIdSholdReturnProductAndFindByIdShouldBeCalled(t *testing.T) {
 	give := "0"
 	want := Product{id: "0", ProductName: "SomeProduct"}
 
 	productService := ProductService{}
-	productRepository := StubProductRepository{want}
+	productRepository := SpyProductRepository{want, false}
 
 	result, err := productService.FindById(&productRepository, give)
 
@@ -25,6 +27,10 @@ func TestFindByIdSholdReturnProduct(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("Error Should Be Nil")
+	}
+
+	if productRepository.findWasCalled != true {
+		t.Errorf("findWasCalled Should Be true")
 	}
 
 }
